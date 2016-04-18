@@ -1,0 +1,28 @@
+{
+  "name": "akari_madness",
+  "version": "1.0.0",
+  "description": "Moar logic puzzles",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/endemic/akari.git"
+  },
+  "keywords": [
+    "logic",
+    "puzzle",
+    "game"
+  ],
+  "author": "Nathan Demick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/endemic/akari/issues"
+  },
+  "homepage": "https://github.com/endemic/akari#readme",
+  "dependencies": {
+    "arcadia": "^2.0.0",
+    "sona": "^1.0.3"
+  }
+}
