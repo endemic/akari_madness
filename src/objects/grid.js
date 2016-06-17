@@ -9,18 +9,41 @@
     Grid = function (options) {
         Arcadia.Shape.apply(this, arguments);
 
-        this.cellCount = options.size;
-        this.cellSize = Grid.CELL_SIZE;
+        // this.data.size = options.size;
+        this.data = options.data;
 
         this.size = {
-            width: this.cellSize * this.cellCount,
-            height: this.cellSize * this.cellCount
+            width: Grid.CELL_SIZE * this.data.size,
+            height: Grid.CELL_SIZE * this.data.size
         };
 
         this.color = null;
-        this.border = '2px white';
+        this.border = '2px black';
+        var self = this;
 
         this.calculateBounds();
+
+        this.cells = [];
+        while (this.cells.length < Math.pow(this.data.size, 2)) {
+            var x = this.cells.length % this.data.size;
+            var y = Math.floor(this.cells.length / this.data.size);
+            var c = new Cell({
+                position: {
+                    x: -this.size.width / 2 + (x * Grid.CELL_SIZE) + Cell.SIZE / 2,
+                    y: -this.size.height / 2 + (y * Grid.CELL_SIZE) + Cell.SIZE / 2
+                }
+            });
+            this.add(c);
+            this.cells.push(c);
+        }
+
+        // Update hint cells
+        this.data.hints.forEach(function (hint) {
+            var x = hint.position.x;
+            var y = hint.position.y;
+            var index = self.data.size * y + x;
+            self.cells[index].convertToHint(hint.number)
+        });
 
         this.lines = new Arcadia.Shape({
             size: {
@@ -28,8 +51,6 @@
                 height: this.size.height
             }
         });
-
-        var self = this;
 
         this.lines.path = function (context) {
             var left = -self.size.width / 2;
@@ -39,19 +60,20 @@
 
             var i;
 
-            for (i = 0; i <= self.cellCount; i += 1) {
+            for (i = 0; i <= self.data.size; i += 1) {
                 // Horizontal lines
-                context.moveTo(left * Arcadia.PIXEL_RATIO, (bottom - self.cellSize * i) * Arcadia.PIXEL_RATIO);
-                context.lineTo(right * Arcadia.PIXEL_RATIO, (bottom - self.cellSize * i) * Arcadia.PIXEL_RATIO);
+                context.moveTo(left * Arcadia.PIXEL_RATIO, (bottom - Grid.CELL_SIZE * i) * Arcadia.PIXEL_RATIO);
+                context.lineTo(right * Arcadia.PIXEL_RATIO, (bottom - Grid.CELL_SIZE * i) * Arcadia.PIXEL_RATIO);
 
                 // Vertical lines
-                context.moveTo((right - self.cellSize * i) * Arcadia.PIXEL_RATIO, top * Arcadia.PIXEL_RATIO);
-                context.lineTo((right - self.cellSize * i) * Arcadia.PIXEL_RATIO, bottom * Arcadia.PIXEL_RATIO);
+                context.moveTo((right - Grid.CELL_SIZE * i) * Arcadia.PIXEL_RATIO, top * Arcadia.PIXEL_RATIO);
+                context.lineTo((right - Grid.CELL_SIZE * i) * Arcadia.PIXEL_RATIO, bottom * Arcadia.PIXEL_RATIO);
             }
 
             // Draw grid
-            context.lineWidth = 2 * Arcadia.PIXEL_RATIO;
-            context.strokeStyle = 'white';
+            context.lineWidth = self._border.width * Arcadia.PIXEL_RATIO;
+            context.strokeStyle = self._border.color;
+            console.log(context.lineWidth, context.strokeStyle);
             context.stroke();
         };
         this.add(this.lines);
@@ -74,8 +96,8 @@
             return [null, null];
         }
 
-        var row = Math.floor((point.y - this.bounds.top) / this.cellSize);
-        var column = Math.floor((point.x - this.bounds.left) / this.cellSize);
+        var row = Math.floor((point.y - this.bounds.top) / Grid.CELL_SIZE);
+        var column = Math.floor((point.x - this.bounds.left) / Grid.CELL_SIZE);
 
         return [row, column];
     };
@@ -87,21 +109,21 @@
         // Get bounds of user interactive area
         this.bounds = {
             right: right + this.position.x,
-            left: (right - (this.cellSize * this.cellCount)) + this.position.x,
+            left: (right - (Grid.CELL_SIZE * this.data.size)) + this.position.x,
             bottom: bottom + this.position.y,
-            top: (bottom - (this.cellSize * this.cellCount)) + this.position.y
+            top: (bottom - (Grid.CELL_SIZE * this.data.size)) + this.position.y
         };
     };
 
     Grid.prototype.resize = function (newCellCount) {
         // Do nothing if passed a bogus arg
-        newCellCount = newCellCount || this.cellCount;
+        newCellCount = newCellCount || this.data.size;
 
-        this.cellCount = newCellCount;
+        this.data.size = newCellCount;
 
         this.size = {
-            width: this.cellSize * this.cellCount,
-            height: this.cellSize * this.cellCount
+            width: Grid.CELL_SIZE * this.data.size,
+            height: Grid.CELL_SIZE * this.data.size
         };
 
         // Also resize the grid lines

@@ -1,11 +1,11 @@
 <!doctype html>
 <html>
   <head>
-    <title>Shikaku Madness</title>
+    <title>Akari Madness</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
     <!-- App manifest -->
-    <link rel="manifest" href="manifest.json">
+    <!-- <link rel="manifest" href="manifest.json"> -->
 
     <!-- Standalone app tags -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -30,10 +30,6 @@
             padding: 0;
             background-size: 100% 100%;
             cursor: pointer;
-        }
-        #bgimages {
-            position: absolute;
-            left: -9999px;
         }
         body,
         #arcadia,
@@ -61,9 +57,7 @@
 
     <!-- objects -->
     <script src="src/objects/grid.js"></script>
-    <script src="src/objects/thumbnail.js"></script>
-    <script src="src/objects/clue.js"></script>
-    <script src="src/objects/square.js"></script>
+    <script src="src/objects/cell.js"></script>
 
     <!-- scenes -->
     <script src="src/scenes/title.js"></script>
@@ -73,40 +67,29 @@
     <script src="src/scenes/editor.js"></script>
     <script src="src/scenes/rules.js"></script>
     <script src="src/scenes/credits.js"></script>
-    <script src="src/scenes/unlock.js"></script>
 
     <script>
-        window.onload = function () {
-            window.sona = new Sona([
-                { url: 'assets/sounds/button.mp3', id: 'button' },
-                { url: 'assets/sounds/erase.mp3', id: 'erase' },
-                { url: 'assets/sounds/place.mp3', id: 'place' },
-                { url: 'assets/sounds/move.mp3', id: 'move' },
-                { url: 'assets/sounds/win.mp3', id: 'win' }
-            ]);
-
-            window.sona.load(function () {
-                new Arcadia.Game({
-                    width: 375,
-                    height: 667,
-                    scene: TitleScene,
-                    scaleToFit: true
-                });
-
-                UnlockScene.initializeStore();
+        document.addEventListener('DOMContentLoaded', function (event) {
+            window.akari = new Arcadia.Game({
+                width: 375,
+                height: 667,
+                scene: GameScene,
+                scaleToFit: true
             });
-        };
-    </script>
+        });
 
+        // window.sona = new Sona([
+        //     { url: 'assets/sounds/button.mp3', id: 'button' },
+        //     { url: 'assets/sounds/erase.mp3', id: 'erase' },
+        //     { url: 'assets/sounds/place.mp3', id: 'place' },
+        //     { url: 'assets/sounds/move.mp3', id: 'move' },
+        //     { url: 'assets/sounds/win.mp3', id: 'win' }
+        // ]);
+        //
+        // window.sona.load(function () {
+        //     // things
+        // });
+    </script>
   </head>
-  <body>
-    <div id="bgimages">
-        <img src="assets/images/background_1.png">
-        <img src="assets/images/background_2.png">
-        <img src="assets/images/background_3.png">
-        <img src="assets/images/background_4.png">
-        <img src="assets/images/background_5.png">
-        <img src="assets/images/background_6.png">
-    </div>
-  </body>
+  <body></body>
 </html>
