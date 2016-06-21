@@ -29,8 +29,8 @@
             var y = Math.floor(this.cells.length / this.data.size);
             var c = new Cell({
                 position: {
-                    x: -this.size.width / 2 + (x * Grid.CELL_SIZE) + Cell.SIZE / 2,
-                    y: -this.size.height / 2 + (y * Grid.CELL_SIZE) + Cell.SIZE / 2
+                    x: -this.size.width / 2 + (x * Grid.CELL_SIZE) + Grid.CELL_SIZE / 2,
+                    y: -this.size.height / 2 + (y * Grid.CELL_SIZE) + Grid.CELL_SIZE / 2
                 }
             });
             this.add(c);
@@ -42,41 +42,8 @@
             var x = hint.position.x;
             var y = hint.position.y;
             var index = self.data.size * y + x;
-            self.cells[index].convertToHint(hint.number)
+            self.cells[index].convertToHint(hint.number);
         });
-
-        this.lines = new Arcadia.Shape({
-            size: {
-                width: this.size.width,
-                height: this.size.height
-            }
-        });
-
-        this.lines.path = function (context) {
-            var left = -self.size.width / 2;
-            var right = self.size.width / 2;
-            var top = -self.size.height / 2;
-            var bottom = self.size.height / 2;
-
-            var i;
-
-            for (i = 0; i <= self.data.size; i += 1) {
-                // Horizontal lines
-                context.moveTo(left * Arcadia.PIXEL_RATIO, (bottom - Grid.CELL_SIZE * i) * Arcadia.PIXEL_RATIO);
-                context.lineTo(right * Arcadia.PIXEL_RATIO, (bottom - Grid.CELL_SIZE * i) * Arcadia.PIXEL_RATIO);
-
-                // Vertical lines
-                context.moveTo((right - Grid.CELL_SIZE * i) * Arcadia.PIXEL_RATIO, top * Arcadia.PIXEL_RATIO);
-                context.lineTo((right - Grid.CELL_SIZE * i) * Arcadia.PIXEL_RATIO, bottom * Arcadia.PIXEL_RATIO);
-            }
-
-            // Draw grid
-            context.lineWidth = self._border.width * Arcadia.PIXEL_RATIO;
-            context.strokeStyle = self._border.color;
-            console.log(context.lineWidth, context.strokeStyle);
-            context.stroke();
-        };
-        this.add(this.lines);
     };
 
     Grid.prototype = new Arcadia.Shape();
@@ -130,6 +97,81 @@
         this.lines.size = this.size;
 
         this.calculateBounds();
+    };
+
+    Grid.prototype.onPointEnd = function (points) {
+        var values = this.getRowAndColumn(points[0]);
+        var row = values[0];
+        var column = values[1];
+
+        if (row === null || column === null) {
+            return;
+        }
+
+        // Get clicked cell
+        var index = row * this.data.size + column;
+        var cell = this.cells[index];
+
+        switch (cell.status) {
+            case Cell.STATUS.EMPTY:
+                // if not lit, place a light
+                cell.convertToLight();
+                // TODO: update the "lit" status of all the cells
+                // in the same row/column
+                break;
+            case Cell.STATUS.LIT:
+                // I think you can toggle flags here?
+                break;
+            case Cell.STATUS.LIGHT:
+                // turn to a flag
+                cell.convertToFlag();
+                break;
+            case Cell.STATUS.FLAG:
+                // turn empty
+                cell.convertToEmpty();
+                break;
+            case Cell.STATUS.HINT:
+                // do nothing, can't modify these
+                break;
+            default:
+                console.warn('Unknown cell status!', cell.status);
+                break;
+        }
+    };
+
+    Grid.prototype.isComplete = function () {
+        var size = this.data.size;
+
+        for (var i = 0; i < this.cells.length; i += 1) {
+            var cell = this.cells[i];
+
+            // if a cell is unlit, immediately return false
+            if (cell.status === Cell.STATUS.EMPTY) {
+                return false;
+            }
+
+            // If a cell is a hint, check for appropriate number of
+            // lights around it
+            if (cell.status === Cell.STATUS.HINT && cell.number) {
+                var up = i - size;
+                var left = i - 1;
+                var right = i + 1;
+                var bottom = i + size;
+
+                var lightsCounter = 0;
+                [up, left, right, bottom].forEach(function (index) {
+                    if (this.cells[index] && this.cells[index].status === Cell.STATUS.LIGHT) {
+                        lightsCounter += 1;
+                    }
+                }.bind(this));
+
+                if (cell.number !== lightsCounter) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     };
 
     root.Grid = Grid;

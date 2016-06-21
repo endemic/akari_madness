@@ -95,17 +95,8 @@
         if (this.gameOver) {
             return;
         }
-
-        var self = this;
-        var values = this.grid.getRowAndColumn(points[0]);
-        var row = values[0];
-        var column = values[1];
-
-        if (row === null || column === null) {
-            return;
-        }
-
-        // Check current row/column
+        
+        // TODO: maybe something here?
     };
 
     GameScene.prototype.onPointMove = function (points) {
@@ -115,13 +106,7 @@
             return;
         }
 
-        var values = this.grid.getRowAndColumn(points[0]);
-        var row = values[0];
-        var column = values[1];
-
-        if (row === null || column === null) {
-            return;
-        }
+        // TODO: maybe something here?
     };
 
     GameScene.prototype.onPointEnd = function (points) {
@@ -131,41 +116,13 @@
             return;
         }
 
-        var self = this;
-        var values = this.grid.getRowAndColumn(points[0]);
-        var row = values[0];
-        var column = values[1];
-
-        if (row === null || column === null) {
-            return;
-        }
-
-        // Check if current row/column has an object (light, flag) already there
-        // if blank, -> place light
-        // if light, -> place flag
-        // if flag, -> clear
-
-
-        // I think the `this.state` array needs to be filled with objects, rather
-        // than integers -- can modify the "Cell" object to display a different
-        // icon based on its state
+        // Grid will handle player interaction & game state
+        this.grid.onPointEnd(points);
 
         // Check if player has won
-        if (this.check()) {
+        if (this.grid.isComplete()) {
             this.win();
         }
-    };
-
-    GameScene.prototype.check = function () {
-        var self = this;
-
-        var success = true;
-
-        this.cells.forEach(function (square) {
-            // Check that each cell has the appropriate number of lights around it
-        });
-
-        return success;
     };
 
     GameScene.prototype.win = function () {
