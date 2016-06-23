@@ -1,3 +1,4 @@
-[ ] Figure out why grid lines aren't drawing
-[ ] Allow toggling between cell states
-[ ] Pass user input into Grid object
+# TODO
+[x] Figure out why grid lines aren't drawing
+[x] Allow toggling between cell states
+[x] Pass user input into Grid object

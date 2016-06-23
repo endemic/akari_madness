@@ -112,12 +112,11 @@
     GameScene.prototype.onPointEnd = function (points) {
         Arcadia.Scene.prototype.onPointEnd.call(this, points);
 
+        // This event is automatically passed down into the "grid" object
+
         if (this.gameOver) {
             return;
         }
-
-        // Grid will handle player interaction & game state
-        this.grid.onPointEnd(points);
 
         // Check if player has won
         if (this.grid.isComplete()) {

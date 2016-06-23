@@ -104,23 +104,31 @@
         var row = values[0];
         var column = values[1];
 
-        if (row === null || column === null) {
+        if (!row || !column) {
             return;
         }
 
         // Get clicked cell
-        var index = row * this.data.size + column;
+        var size = this.data.size;
+        var index = row * size + column;
         var cell = this.cells[index];
 
         switch (cell.status) {
             case Cell.STATUS.EMPTY:
-                // if not lit, place a light
+                // place a light
                 cell.convertToLight();
                 // TODO: update the "lit" status of all the cells
                 // in the same row/column
-                break;
-            case Cell.STATUS.LIT:
-                // I think you can toggle flags here?
+
+                // TODO: need to start at the source, then go left, stopping at any hints
+                // then go right, stopping at any hints
+                var i;
+                for (i = row * size; i < row * size + size; i += 1) {
+                    // skip the light source itself
+                    if (i !== index) {
+                        this.cells[i].incrementLightSources();
+                    }
+                }
                 break;
             case Cell.STATUS.LIGHT:
                 // turn to a flag
@@ -145,8 +153,13 @@
         for (var i = 0; i < this.cells.length; i += 1) {
             var cell = this.cells[i];
 
-            // if a cell is unlit, immediately return false
+            // fail if a cell is unlit
             if (cell.status === Cell.STATUS.EMPTY) {
+                return false;
+            }
+
+            // fail if cell is lit by more than one source
+            if (cell.lightSources > 1) {
                 return false;
             }
 

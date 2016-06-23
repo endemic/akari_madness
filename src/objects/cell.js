@@ -13,36 +13,82 @@
         this.vertices = 4;
         this.color = 'white';
         this.border = '1px black';
-        this.status = Cell.STATUS.EMPTY;  // default
+        this.status = Cell.STATUS.EMPTY;
+
+        // Keeps track if cell is "lit" by more than one
+        // light... this value needs to be "1" for all lit
+        // cells for the puzzle to be complete
+        this.lightSources = 0;
+
+        // Show a "flag" or "light", based on cell state
+        this.icon = new Arcadia.Shape({
+            size: {
+                width: this.size.width / 2,
+                height: this.size.height / 2
+            },
+            color: 'black'
+        });
+        this.add(this.icon);
+        this.deactivate(this.icon);
     };
 
     Cell.prototype = new Arcadia.Shape();
 
     Cell.STATUS = {
         EMPTY: 0,
-        LIT: 1,
         LIGHT: 2,
         FLAG: 3,
         HINT: 4
     };
 
-    // Cell.prototype.path = function (context) {
-    // TODO: branch here based on status
-    // };
+    Cell.prototype.incrementLightSources = function () {
+        this.lightSources += 1;
+
+        if (this.lightSources === 1) {
+            this.color = 'teal';
+        }
+    };
+
+    Cell.prototype.decrementLightSources = function () {
+        this.lightSources -= 1;
+
+        if (this.lightSources <= 0) {
+            this.lightSources = 0;
+            this.color = 'white';
+        }
+    };
+
+    /* TODO: combine all these conversion methods into a single 
+    method that uses a switch statement, so we can ensure integrity
+    of state change order; i.e. empty -> light -> flag -> empty */
 
     Cell.prototype.convertToLight = function () {
-        this.color = 'green';
         this.status = Cell.STATUS.LIGHT;
+        this.activate(this.icon);
+        this.icon.vertices = 0;
     };
 
     Cell.prototype.convertToFlag = function () {
-        this.color = 'red';
         this.status = Cell.STATUS.FLAG;
+        this.icon.vertices = 4;
+
+        // this.icon.path = function (context) {
+        //     // draw a flag here
+        //     // something something * Arcadia.PIXEL_RATIO
+        //     var x = -this.size.width / 2 * Arcadia.PIXEL_RATIO;
+        //     var y = -this.size.height / 2 * Arcadia.PIXEL_RATIO;
+        //     var width = this.size.width * Arcadia.PIXEL_RATIO;
+        //     var height = this.size.height * Arcadia.PIXEL_RATIO;
+        //     context.lineWidth = 5 * Arcadia.PIXEL_RATIO;
+        //     context.strokeRect(x, y, width, height);
+        // };
+        // this.icon.dirty = true; // trigger redraw
     };
 
     Cell.prototype.convertToEmpty = function () {
         this.color = 'white';
         this.status = Cell.STATUS.EMPTY;
+        this.deactivate(this.icon);
     };
 
     Cell.prototype.convertToHint = function (number) {
