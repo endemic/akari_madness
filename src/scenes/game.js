@@ -137,7 +137,8 @@
         var self = this;
 
         window.setTimeout(function () {
-            sona.play('win');
+            // sona.play('win');
+            alert('u win, bro');
 
             // Hide existing crap
             self.grid.tween('alpha', 0, 500);

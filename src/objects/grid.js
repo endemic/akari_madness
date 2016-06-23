@@ -104,7 +104,7 @@
         var row = values[0];
         var column = values[1];
 
-        if (!row || !column) {
+        if (row === null || column === null) {
             return;
         }
 
@@ -117,22 +117,85 @@
             case Cell.STATUS.EMPTY:
                 // place a light
                 cell.convertToLight();
-                // TODO: update the "lit" status of all the cells
-                // in the same row/column
 
-                // TODO: need to start at the source, then go left, stopping at any hints
-                // then go right, stopping at any hints
                 var i;
-                for (i = row * size; i < row * size + size; i += 1) {
-                    // skip the light source itself
-                    if (i !== index) {
-                        this.cells[i].incrementLightSources();
+
+                // Go to the left of the light
+                for (i = index - 1; i >= row * size; i -= 1) {
+                    if (this.cells[i].status === Cell.STATUS.HINT) {
+                        break;
                     }
+                    this.cells[i].incrementLightSources();
                 }
+
+                // Go to the right of the light
+                for (i = index + 1; i < row * size + size; i += 1) {
+                    if (this.cells[i].status === Cell.STATUS.HINT) {
+                        break;
+                    }
+                    this.cells[i].incrementLightSources();
+                }
+
+                // Go up from the light
+                for (i = index - size; i > 0; i -= size) {
+                    if (this.cells[i].status === Cell.STATUS.HINT) {
+                        break;
+                    }
+                    this.cells[i].incrementLightSources();
+                }
+
+                // Go down from the light
+                for (i = index + size; i < Math.pow(size, 2); i += size) {
+                    if (this.cells[i].status === Cell.STATUS.HINT) {
+                        break;
+                    }
+                    this.cells[i].incrementLightSources();
+                }
+
+                // Increment the light source itself
+                cell.incrementLightSources();
+
                 break;
             case Cell.STATUS.LIGHT:
                 // turn to a flag
                 cell.convertToFlag();
+
+                var i;
+
+                // Go to the left of the light
+                for (i = index - 1; i >= row * size; i -= 1) {
+                    if (this.cells[i].status === Cell.STATUS.HINT) {
+                        break;
+                    }
+                    this.cells[i].decrementLightSources();
+                }
+
+                // Go to the right of the light
+                for (i = index + 1; i < row * size + size; i += 1) {
+                    if (this.cells[i].status === Cell.STATUS.HINT) {
+                        break;
+                    }
+                    this.cells[i].decrementLightSources();
+                }
+
+                // Go up from the light
+                for (i = index - size; i > 0; i -= size) {
+                    if (this.cells[i].status === Cell.STATUS.HINT) {
+                        break;
+                    }
+                    this.cells[i].decrementLightSources();
+                }
+
+                // Go down from the light
+                for (i = index + size; i < Math.pow(size, 2); i += size) {
+                    if (this.cells[i].status === Cell.STATUS.HINT) {
+                        break;
+                    }
+                    this.cells[i].decrementLightSources();
+                }
+
+                // Increment the light source itself
+                cell.decrementLightSources();
                 break;
             case Cell.STATUS.FLAG:
                 // turn empty
@@ -154,12 +217,14 @@
             var cell = this.cells[i];
 
             // fail if a cell is unlit
-            if (cell.status === Cell.STATUS.EMPTY) {
+            if (cell.status !== Cell.STATUS.HINT && cell.lightSources < 1) {
+                console.log('Cell ', i, ' is not lit');
                 return false;
             }
 
-            // fail if cell is lit by more than one source
-            if (cell.lightSources > 1) {
+            // fail if a light is on an already-lit cell
+            if (cell.status === Cell.STATUS.LIGHT && cell.lightSources > 1) {
+                console.log('Cell ', i, ' has more than one light source');
                 return false;
             }
 
@@ -179,6 +244,7 @@
                 }.bind(this));
 
                 if (cell.number !== lightsCounter) {
+                    console.log('Cell ', i, ' has ', lightsCounter, ' lights around it, but needs ', cell.number);
                     return false;
                 }
             }
