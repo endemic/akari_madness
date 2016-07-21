@@ -30,6 +30,14 @@
         });
         this.add(this.icon);
         this.deactivate(this.icon);
+
+        // Used for the "hint" state
+        this.label = new Arcadia.Label({
+            font: '24px monospace',
+            text: this.number
+        });
+        this.add(this.label);
+        this.deactivate(this.label);
     };
 
     Cell.prototype = new Arcadia.Shape();
@@ -58,7 +66,7 @@
         }
     };
 
-    /* TODO: combine all these conversion methods into a single 
+    /* TODO: combine all these conversion methods into a single
     method that uses a switch statement, so we can ensure integrity
     of state change order; i.e. empty -> light -> flag -> empty */
 
@@ -86,22 +94,25 @@
     };
 
     Cell.prototype.convertToEmpty = function () {
+        this.number = null;
         this.color = 'white';
+        if (this.lightSources > 0) {
+            this.color = 'teal';
+        }
         this.status = Cell.STATUS.EMPTY;
         this.deactivate(this.icon);
+        this.deactivate(this.label);
     };
 
     Cell.prototype.convertToHint = function (number) {
-        this.number = number;
+        // Funky condition here, because `0` (a valid hint #) evals to `false`
+        this.number = Number.isInteger(number) ? number : null;
         this.color = 'black';
         this.status = Cell.STATUS.HINT;
 
         if (this.number !== null) {
-            this.label = new Arcadia.Label({
-                font: '24px monospace',
-                text: this.number
-            });
-            this.add(this.label);
+            this.label.text = this.number;
+            this.activate(this.label);
         }
     };
 

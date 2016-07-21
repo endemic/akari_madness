@@ -9,20 +9,20 @@
     Grid = function (options) {
         Arcadia.Shape.apply(this, arguments);
 
-        // this.data.size = options.size;
-        this.data = options.data;
+        this.data = options.data || {size: 10, hints: []};
 
         this.size = {
             width: Grid.CELL_SIZE * this.data.size,
             height: Grid.CELL_SIZE * this.data.size
         };
-
         this.color = null;
         this.border = '2px black';
-        var self = this;
+
+        this.mode = Grid.MODES.PLAY;
 
         this.calculateBounds();
 
+        // Create grid cells
         this.cells = [];
         while (this.cells.length < Math.pow(this.data.size, 2)) {
             var x = this.cells.length % this.data.size;
@@ -37,19 +37,23 @@
             this.cells.push(c);
         }
 
-        // Update hint cells
+        // Update cells used for hints
         this.data.hints.forEach(function (hint) {
             var x = hint.position.x;
             var y = hint.position.y;
-            var index = self.data.size * y + x;
-            self.cells[index].convertToHint(hint.number);
-        });
+            var index = this.data.size * y + x;
+            this.cells[index].convertToHint(hint.number);
+        }.bind(this));
     };
 
     Grid.prototype = new Arcadia.Shape();
 
     Grid.MAX_SIZE = 372;
     Grid.CELL_SIZE = Grid.MAX_SIZE / 10;
+    Grid.MODES = {
+        PLAY: 'play',
+        EDIT: 'edit'
+    };
 
     Grid.prototype.containsPoint = function (point) {
         return point.x < this.bounds.right &&
@@ -83,18 +87,43 @@
     };
 
     Grid.prototype.resize = function (newCellCount) {
-        // Do nothing if passed a bogus arg
-        newCellCount = newCellCount || this.data.size;
+        if (!Number.isInteger(newCellCount)) {
+            return;
+        }
 
         this.data.size = newCellCount;
+
+        // Add new cells if necessary
+        while (this.cells.length < Math.pow(this.data.size, 2)) {
+            var c = new Cell();
+            this.add(c);
+            this.cells.push(c);
+        }
 
         this.size = {
             width: Grid.CELL_SIZE * this.data.size,
             height: Grid.CELL_SIZE * this.data.size
         };
 
-        // Also resize the grid lines
-        this.lines.size = this.size;
+        // Hide all cells, then show correct # of cells
+        this.cells.forEach(function (cell) {
+            this.deactivate(cell);
+        }.bind(this));
+
+        this.cells.forEach(function (cell, index) {
+            if (index >= Math.pow(this.data.size, 2)) {
+                return;
+            }
+
+            this.activate(cell);
+            var x = index % this.data.size;
+            var y = Math.floor(index / this.data.size);
+
+            cell.position = {
+                x: -this.size.width / 2 + (x * Grid.CELL_SIZE) + Grid.CELL_SIZE / 2,
+                y: -this.size.height / 2 + (y * Grid.CELL_SIZE) + Grid.CELL_SIZE / 2
+            };
+        }.bind(this));
 
         this.calculateBounds();
     };
@@ -108,10 +137,31 @@
             return;
         }
 
-        // Get clicked cell
+        // Get selected cell
         var size = this.data.size;
         var index = row * size + column;
         var cell = this.cells[index];
+
+        // Editor mode
+        if (this.mode === Grid.MODES.EDIT) {
+            switch (cell.status) {
+            case Cell.STATUS.EMPTY:
+                cell.convertToHint();
+                break;
+            case Cell.STATUS.HINT:
+                if (cell.number >= 4) {
+                    cell.convertToEmpty();
+                } else if (cell.number !== null) {
+                    cell.convertToHint(cell.number + 1);
+                } else {
+                    cell.convertToHint(0);
+                }
+                break;
+            }
+
+            // Exit early to avoid "normal" gameplay handling
+            return;
+        }
 
         switch (cell.status) {
             case Cell.STATUS.EMPTY:

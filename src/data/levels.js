@@ -1,8 +1,8 @@
 var LEVELS = [
-    // TODO: level format
     // https://en.wikipedia.org/wiki/Light_Up_(puzzle)
     // Basically need to have an (x, y) position for black squares,
     // as well as an (optional) number on each one
+    // (x, y) starts in upper left, which is (0, 0)
     // Oh yeah, also the size of the grid
     {
         size: 8,
@@ -22,3 +22,9 @@ var LEVELS = [
         ]
     }
 ];
+
+if (!localStorage.getObject('puzzles')) {
+    localStorage.setObject('puzzles', LEVELS);
+}
+
+LEVELS = localStorage.getObject('puzzles');

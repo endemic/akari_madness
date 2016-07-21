@@ -226,8 +226,6 @@
 
     LevelSelectScene.prototype.updatePageLabel = function () {
         this.pageLabel.text = 'Page ' + (this.currentPage + 1) + ' of ' + this.totalPages;
-        this.puzzleLabel.text = 'Puzzle #' + (this.selectedLevel + 1);
-        // this.difficultyLabel.text = 'Difficulty: ' + LEVELS[this.selectedLevel].difficulty;
         this.difficultyLabel.text = 'Size: ' + LEVELS[this.selectedLevel].size + 'x' + LEVELS[this.selectedLevel].size;
         this.completedLabel.text = 'Completed? ' + (this.completedLevels[this.selectedLevel] ? '✓' : '✗');
     };
@@ -264,12 +262,6 @@
         });
         this.add(this.pageLabel);
 
-        this.puzzleLabel = new Arcadia.Label({
-            position: {x: 0, y: 160},
-            font: '24px monospace'
-        });
-        this.add(this.puzzleLabel);
-
         this.difficultyLabel = new Arcadia.Label({
             position: {x: 0, y: 190},
             font: '24px monospace'
@@ -296,21 +288,21 @@
         });
         this.add(backButton);
 
-        if (Arcadia.ENV.cordova && Arcadia.isLocked()) {
-            var unlockButton = new Arcadia.Button({
-                position: {x: this.size.width / 2 - 65, y: -this.size.height / 2 + 25},
-                size: {width: 120, height: 40},
-                color: null,
-                border: '2px white',
-                text: 'unlock',
-                font: '24px monospace',
-                action: function () {
-                    sona.play('button');
-                    Arcadia.changeScene(UnlockScene);
-                }
-            });
-            this.add(unlockButton);
-        }
+        // if (Arcadia.ENV.cordova && Arcadia.isLocked()) {
+        var unlockButton = new Arcadia.Button({
+            position: {x: this.size.width / 2 - 65, y: -this.size.height / 2 + 25},
+            size: {width: 120, height: 40},
+            color: null,
+            border: '2px white',
+            text: 'create',
+            font: '24px monospace',
+            action: function () {
+                sona.play('button');
+                Arcadia.changeScene(EditorScene);
+            }
+        });
+        this.add(unlockButton);
+        // }
 
         var title = new Arcadia.Label({
             text: 'choose\npuzzle',

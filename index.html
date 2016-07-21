@@ -58,6 +58,7 @@
     <!-- objects -->
     <script src="src/objects/grid.js"></script>
     <script src="src/objects/cell.js"></script>
+    <script src="src/objects/thumbnail.js"></script>
 
     <!-- scenes -->
     <script src="src/scenes/title.js"></script>
@@ -67,16 +68,22 @@
     <script src="src/scenes/editor.js"></script>
     <script src="src/scenes/rules.js"></script>
     <script src="src/scenes/credits.js"></script>
+    <script src="src/scenes/editor.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function (event) {
             window.akari = new Arcadia.Game({
                 width: 375,
                 height: 667,
-                scene: GameScene,
+                scene: LevelSelectScene,
                 scaleToFit: true
             });
         });
+
+        // TODO: remove this
+        window.sona = {
+            play: function dummy() {}
+        };
 
         // window.sona = new Sona([
         //     { url: 'assets/sounds/button.mp3', id: 'button' },
