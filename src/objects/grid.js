@@ -193,7 +193,7 @@
                 }
 
                 // Go up from the light
-                for (i = index - size; i > 0; i -= size) {
+                for (i = index - size; i >= 0; i -= size) {
                     if (this.cells[i].status === Cell.STATUS.HINT) {
                         break;
                     }
