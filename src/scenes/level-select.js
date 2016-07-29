@@ -1,5 +1,5 @@
 /*jslint this, browser */
-/*global window, Arcadia, sona, GameScene, UnlockScene, TitleScene, LEVELS,
+/*global window, Arcadia, sona, GameScene, UnlockScene, TitleScene, PUZZLES,
   Thumbnail */
 
 (function (root) {
@@ -16,13 +16,13 @@
 
         Arcadia.cycleBackground();
 
-        this.selectedLevel = parseInt(localStorage.getItem('selectedLevel'), 10) || options.level || 0;
+        this.selectedPuzzle = parseInt(localStorage.getItem('selectedPuzzle'), 10) || options.puzzle || 0;
         this.perPage = 9;
-        this.totalPages = Math.ceil(LEVELS.length / this.perPage);
-        this.currentPage = Math.floor(this.selectedLevel / this.perPage);
-        this.completedLevels = localStorage.getObject('completedLevels') || [];
-        while (this.completedLevels.length < LEVELS.length) {
-            this.completedLevels.push(null);
+        this.totalPages = Math.ceil(PUZZLES.length / this.perPage);
+        this.currentPage = Math.floor(this.selectedPuzzle / this.perPage);
+        this.completedPuzzles = localStorage.getObject('completedPuzzles') || [];
+        while (this.completedPuzzles.length < PUZZLES.length) {
+            this.completedPuzzles.push(null);
         }
 
         this.drawUi();
@@ -56,7 +56,7 @@
                     }
                 });
 
-                thumbnail.drawPreview(index, self.completedLevels[index]);
+                thumbnail.drawPreview(index, self.completedPuzzles[index]);
 
                 self.add(thumbnail);
                 page.push(thumbnail);
@@ -84,7 +84,7 @@
         }
 
         // Highlight the selected level thumbnail
-        this.previousThumbnail = this.thumbnails[this.activeThumbnailPage][this.selectedLevel - this.currentPage * this.perPage];
+        this.previousThumbnail = this.thumbnails[this.activeThumbnailPage][this.selectedPuzzle - this.currentPage * this.perPage];
         this.previousThumbnail.highlight();
     };
 
@@ -126,7 +126,7 @@
                 };
 
                 levelIndex = self.currentPage * self.perPage + index;
-                shape.drawPreview(levelIndex, self.completedLevels[levelIndex]);
+                shape.drawPreview(levelIndex, self.completedPuzzles[levelIndex]);
 
                 delay = Math.floor(index / 3) * LevelSelectScene.TRANSITION_DELAY + 100;
 
@@ -139,9 +139,9 @@
             thumbnail.highlight();
             this.previousThumbnail.lowlight();
             this.previousThumbnail = thumbnail;
-            this.selectedLevel = this.currentPage * this.perPage;
+            this.selectedPuzzle = this.currentPage * this.perPage;
             this.updatePageLabel();
-            localStorage.setItem('selectedLevel', this.selectedLevel);
+            localStorage.setItem('selectedPuzzle', this.selectedPuzzle);
 
             window.setTimeout(function () {
                 if (self.currentPage < self.totalPages - 1) {
@@ -193,7 +193,7 @@
                 };
 
                 levelIndex = self.currentPage * self.perPage + index;
-                shape.drawPreview(levelIndex, self.completedLevels[levelIndex]);
+                shape.drawPreview(levelIndex, self.completedPuzzles[levelIndex]);
 
                 delay = Math.floor((self.perPage - index - 1) / 3) * LevelSelectScene.TRANSITION_DELAY + 100;
 
@@ -206,9 +206,9 @@
             thumbnail.highlight();
             this.previousThumbnail.lowlight();
             this.previousThumbnail = thumbnail;
-            this.selectedLevel = this.currentPage * this.perPage;
+            this.selectedPuzzle = this.currentPage * this.perPage;
             this.updatePageLabel();
-            localStorage.setItem('selectedLevel', this.selectedLevel);
+            localStorage.setItem('selectedPuzzle', this.selectedPuzzle);
 
             window.setTimeout(function () {
                 if (self.currentPage > 0) {
@@ -226,8 +226,8 @@
 
     LevelSelectScene.prototype.updatePageLabel = function () {
         this.pageLabel.text = 'Page ' + (this.currentPage + 1) + ' of ' + this.totalPages;
-        this.difficultyLabel.text = 'Size: ' + LEVELS[this.selectedLevel].size + 'x' + LEVELS[this.selectedLevel].size;
-        this.completedLabel.text = 'Completed? ' + (this.completedLevels[this.selectedLevel] ? '✓' : '✗');
+        this.difficultyLabel.text = 'Size: ' + PUZZLES[this.selectedPuzzle].size + 'x' + PUZZLES[this.selectedPuzzle].size;
+        this.completedLabel.text = 'Completed? ' + (this.completedPuzzles[this.selectedPuzzle] ? '✓' : '✗');
     };
 
     LevelSelectScene.prototype.onPointEnd = function (points) {
@@ -246,8 +246,8 @@
                 self.previousThumbnail.lowlight();
                 thumbnail.highlight();
                 self.previousThumbnail = thumbnail;
-                self.selectedLevel = self.currentPage * self.perPage + index;
-                localStorage.setItem('selectedLevel', self.selectedLevel);
+                self.selectedPuzzle = self.currentPage * self.perPage + index;
+                localStorage.setItem('selectedPuzzle', self.selectedPuzzle);
                 self.updatePageLabel();
             }
         });
@@ -320,10 +320,10 @@
             font: '36px monospace',
             action: function () {
                 sona.play('button');
-                if (Arcadia.isLocked() && self.selectedLevel >= Arcadia.FREE_LEVEL_COUNT) {
+                if (Arcadia.isLocked() && self.selectedPuzzle >= Arcadia.FREE_LEVEL_COUNT) {
                     Arcadia.changeScene(UnlockScene);
                 } else {
-                    Arcadia.changeScene(GameScene, {level: self.selectedLevel});
+                    Arcadia.changeScene(GameScene, {level: self.selectedPuzzle});
                 }
             }
         });

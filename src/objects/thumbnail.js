@@ -1,5 +1,5 @@
 	/*jslint this: true, browser: true */
-/*global Arcadia, window, LEVELS */
+/*global Arcadia, window, PUZZLES */
 
 (function (root) {
     'use strict';
@@ -53,9 +53,10 @@
 
     Thumbnail.SIZE = 75;
 
-    Thumbnail.prototype.drawPreview = function (levelIndex, isComplete) {
+    Thumbnail.prototype.drawPreview = function (index, complete) {
         // Can't draw a preview without data
-        if (LEVELS[levelIndex] === undefined) {
+        // TODO: maybe don't rely on global var here
+        if (PUZZLES[index] === undefined) {
             this.alpha = 0;
             return;
         }
@@ -64,16 +65,16 @@
             this.alpha = 1;
         }
 
-        if (isComplete) {
+        if (complete) {
             this.border = '2px limegreen';
-        } else if (Arcadia.isLocked() && levelIndex >= Arcadia.FREE_LEVEL_COUNT) {
+        } else if (Arcadia.isLocked() && index >= Arcadia.FREE_LEVEL_COUNT) {
             this.border = '2px crimson';
         } else {
             this.border = '2px white';
         }
 
-        this.pixels.puzzleSize = LEVELS[levelIndex].size;
-        this.pixels.hints = LEVELS[levelIndex].hints;
+        this.pixels.puzzleSize = PUZZLES[index].size;
+        this.pixels.hints = PUZZLES[index].hints;
         this.pixels.dirty = true;
     };
 

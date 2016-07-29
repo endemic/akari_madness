@@ -4,7 +4,7 @@
 // (x, y) starts in upper left, which is (0, 0)
 // Oh yeah, also the size of the grid
 
-var LEVELS = [
+var PUZZLES = [
     {"size":5,"hints":[{"position":{"x":0,"y":0},"number":2},{"position":{"x":2,"y":3},"number":2},{"position":{"x":4,"y":4},"number":1}]},
     {"size":5,"hints":[{"position":{"x":0,"y":0},"number":null},{"position":{"x":2,"y":2},"number":4},{"position":{"x":4,"y":4},"number":null}]},
     {"size":5,"hints":[{"position":{"x":3,"y":0},"number":3},{"position":{"x":0,"y":3},"number":1}]},
@@ -14,7 +14,7 @@ var LEVELS = [
 ];
 
 if (!localStorage.getObject('puzzles')) {
-    localStorage.setObject('puzzles', LEVELS);
+    localStorage.setObject('puzzles', PUZZLES);
 }
 
-LEVELS = localStorage.getObject('puzzles');
+PUZZLES = localStorage.getObject('puzzles');

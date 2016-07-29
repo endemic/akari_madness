@@ -1,5 +1,5 @@
 /*jslint this, browser */
-/*global window, Arcadia, sona, LEVELS, TUTORIALS, Grid, Cell, LevelSelectScene */
+/*global window, Arcadia, sona, PUZZLES, TUTORIALS, Grid, Cell, LevelSelectScene */
 
 (function (root) {
     'use strict';
@@ -13,7 +13,7 @@
 
         this.level = options.level || 0;
         localStorage.setItem('selectedLevel', this.level);
-        this.levelData = LEVELS[this.level];
+        this.levelData = PUZZLES[this.level];
         this.showTutorial = !!TUTORIALS[this.level];
         this.tutorialStep = 0;
 
@@ -94,7 +94,7 @@
         if (this.gameOver) {
             return;
         }
-        
+
         // TODO: maybe something here?
     };
 
@@ -126,12 +126,12 @@
     GameScene.prototype.win = function () {
         this.gameOver = true;
 
-        var completedLevels = localStorage.getObject('completedLevels') || [];
-        while (completedLevels.length < LEVELS.length) {
-            completedLevels.push(null);
+        var completedPuzzles = localStorage.getObject('completedPuzzles') || [];
+        while (completedPuzzles.length < PUZZLES.length) {
+            completedPuzzles.push(null);
         }
-        completedLevels[this.level] = true;
-        localStorage.setObject('completedLevels', completedLevels);
+        completedPuzzles[this.level] = true;
+        localStorage.setObject('completedPuzzles', completedPuzzles);
 
         window.setTimeout(function () {
             sona.play('win');
@@ -272,15 +272,15 @@
             action: function () {
                 sona.play('button');
 
-                var completedLevels = localStorage.getObject('completedLevels') || [];
-                var incompleteLevel = completedLevels.indexOf(null);
+                var completedPuzzles = localStorage.getObject('completedPuzzles') || [];
+                var incompletePuzzleIndex = completedPuzzles.indexOf(null);
 
-                if (incompleteLevel === -1) {
+                if (incompletePuzzleIndex === -1) {
                     Arcadia.changeScene(LevelSelectScene);
-                } else if (Arcadia.isLocked() && incompleteLevel >= Arcadia.FREE_LEVEL_COUNT) {
+                } else if (Arcadia.isLocked() && incompletePuzzleIndex >= Arcadia.FREE_LEVEL_COUNT) {
                     Arcadia.changeScene(UnlockScene);
                 } else {
-                    Arcadia.changeScene(GameScene, {level: incompleteLevel});
+                    Arcadia.changeScene(GameScene, {level: incompletePuzzleIndex});
                 }
             }
         }));

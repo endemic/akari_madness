@@ -41,7 +41,7 @@
             font: '36px monospace',
             action: function () {
                 // Clear out saved level data here! start over like a champ
-                // localStorage.setObject('completed', new Array(LEVELS.length));
+                // localStorage.setObject('completedPuzzles', new Array(PUZZLES.length));
                 sona.play('button');
                 Arcadia.changeScene(LevelSelectScene);
             }

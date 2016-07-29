@@ -1,5 +1,5 @@
 /*jslint this, browser */
-/*global window, Arcadia, sona, TitleScene, LEVELS */
+/*global window, Arcadia, sona, TitleScene, PUZZLES */
 
 (function (root) {
     'use strict';
@@ -80,11 +80,11 @@
                 sona.play('button');
 
                 if (window.confirm('Reset all saved data?')) {
-                    var completedLevels = [];
-                    while (completedLevels.length < LEVELS.length) {
-                        completedLevels.push(null);
+                    var completedPuzzles = [];
+                    while (completedPuzzles.length < PUZZLES.length) {
+                        completedPuzzles.push(null);
                     }
-                    localStorage.setObject('completedLevels', completedLevels);
+                    localStorage.setObject('completedPuzzles', completedPuzzles);
                 }
             }
         });
