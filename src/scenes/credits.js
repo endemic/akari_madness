@@ -1,5 +1,5 @@
 /*jslint this, browser */
-/*global window, Arcadia, sona, LevelSelectScene */
+/*global window, Arcadia, sona, PuzzleSelectScene */
 
 (function (root) {
     'use strict';
@@ -43,7 +43,7 @@
                 // Clear out saved level data here! start over like a champ
                 // localStorage.setObject('completedPuzzles', new Array(PUZZLES.length));
                 sona.play('button');
-                Arcadia.changeScene(LevelSelectScene);
+                Arcadia.changeScene(PuzzleSelectScene);
             }
         });
         this.add(button);

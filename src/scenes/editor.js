@@ -175,7 +175,7 @@
             },
             action: function () {
                 sona.play('button');
-                Arcadia.changeScene(LevelSelectScene);
+                Arcadia.changeScene(PuzzleSelectScene);
             }
         });
         this.add(quitButton);

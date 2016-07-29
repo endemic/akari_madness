@@ -1,5 +1,5 @@
 /*jslint this, browser */
-/*global Arcadia, window, PUZZLES, RulesScene, LevelSelectScene, UnlockScene, GameScene */
+/*global Arcadia, window, PUZZLES, RulesScene, PuzzleSelectScene, UnlockScene, GameScene */
 
 (function (root) {
     'use strict';
@@ -37,7 +37,7 @@
 
                 // TOOO: Extract this code from here & game scene
                 if (incompletePuzzleIndex === -1) {
-                    Arcadia.changeScene(LevelSelectScene);
+                    Arcadia.changeScene(PuzzleSelectScene);
                 } else if (Arcadia.isLocked() && incompletePuzzleIndex >= Arcadia.FREE_LEVEL_COUNT) {
                     Arcadia.changeScene(UnlockScene);
                 } else {

@@ -5,9 +5,9 @@
 (function (root) {
     'use strict';
 
-    var LevelSelectScene;
+    var PuzzleSelectScene;
 
-    LevelSelectScene = function (options) {
+    PuzzleSelectScene = function (options) {
         Arcadia.Scene.call(this, options);
 
         options = options || {};
@@ -88,9 +88,9 @@
         this.previousThumbnail.highlight();
     };
 
-    LevelSelectScene.prototype = new Arcadia.Scene();
+    PuzzleSelectScene.prototype = new Arcadia.Scene();
 
-    LevelSelectScene.prototype.next = function () {
+    PuzzleSelectScene.prototype.next = function () {
         var offset = -Arcadia.VIEWPORT_WIDTH,
             thumbnail,
             self = this;
@@ -102,9 +102,9 @@
 
             // Move (old) current page to the left
             this.thumbnails[this.activeThumbnailPage].forEach(function (shape, index) {
-                var delay = Math.floor(index / 3) * LevelSelectScene.TRANSITION_DELAY;
+                var delay = Math.floor(index / 3) * PuzzleSelectScene.TRANSITION_DELAY;
                 window.setTimeout(function () {
-                    shape.tween('position', {x: shape.position.x + offset, y: shape.position.y}, LevelSelectScene.TRANSITION_DURATION, LevelSelectScene.TRANSITION_TYPE);
+                    shape.tween('position', {x: shape.position.x + offset, y: shape.position.y}, PuzzleSelectScene.TRANSITION_DURATION, PuzzleSelectScene.TRANSITION_TYPE);
                 }, delay);
             });
 
@@ -128,10 +128,10 @@
                 levelIndex = self.currentPage * self.perPage + index;
                 shape.drawPreview(levelIndex, self.completedPuzzles[levelIndex]);
 
-                delay = Math.floor(index / 3) * LevelSelectScene.TRANSITION_DELAY + 100;
+                delay = Math.floor(index / 3) * PuzzleSelectScene.TRANSITION_DELAY + 100;
 
                 window.setTimeout(function () {
-                    shape.tween('position', {x: shape.position.x + offset, y: shape.position.y}, LevelSelectScene.TRANSITION_DURATION, LevelSelectScene.TRANSITION_TYPE);
+                    shape.tween('position', {x: shape.position.x + offset, y: shape.position.y}, PuzzleSelectScene.TRANSITION_DURATION, PuzzleSelectScene.TRANSITION_TYPE);
                 }, delay);
             });
 
@@ -148,7 +148,7 @@
                     self.nextButton.disabled = false;
                     self.nextButton.alpha = 1;
                 }
-            }, LevelSelectScene.TOTAL_TRANSITION_DURATION);
+            }, PuzzleSelectScene.TOTAL_TRANSITION_DURATION);
 
             if (this.previousButton.alpha < 1) {
                 this.previousButton.disabled = false;
@@ -157,7 +157,7 @@
         }
     };
 
-    LevelSelectScene.prototype.previous = function () {
+    PuzzleSelectScene.prototype.previous = function () {
         var offset = Arcadia.VIEWPORT_WIDTH,
             thumbnail,
             self = this;
@@ -169,9 +169,9 @@
 
             // Move (old) current page to the right
             this.thumbnails[this.activeThumbnailPage].forEach(function (shape, index) {
-                var delay = Math.floor((self.perPage - index - 1) / 3) * LevelSelectScene.TRANSITION_DELAY;
+                var delay = Math.floor((self.perPage - index - 1) / 3) * PuzzleSelectScene.TRANSITION_DELAY;
                 window.setTimeout(function () {
-                    shape.tween('position', {x: shape.position.x + offset, y: shape.position.y}, LevelSelectScene.TRANSITION_DURATION, LevelSelectScene.TRANSITION_TYPE);
+                    shape.tween('position', {x: shape.position.x + offset, y: shape.position.y}, PuzzleSelectScene.TRANSITION_DURATION, PuzzleSelectScene.TRANSITION_TYPE);
                 }, delay);
             });
 
@@ -195,10 +195,10 @@
                 levelIndex = self.currentPage * self.perPage + index;
                 shape.drawPreview(levelIndex, self.completedPuzzles[levelIndex]);
 
-                delay = Math.floor((self.perPage - index - 1) / 3) * LevelSelectScene.TRANSITION_DELAY + 100;
+                delay = Math.floor((self.perPage - index - 1) / 3) * PuzzleSelectScene.TRANSITION_DELAY + 100;
 
                 window.setTimeout(function () {
-                    shape.tween('position', {x: shape.position.x + offset, y: shape.position.y}, LevelSelectScene.TRANSITION_DURATION, LevelSelectScene.TRANSITION_TYPE);
+                    shape.tween('position', {x: shape.position.x + offset, y: shape.position.y}, PuzzleSelectScene.TRANSITION_DURATION, PuzzleSelectScene.TRANSITION_TYPE);
                 }, delay);
             });
 
@@ -215,7 +215,7 @@
                     self.previousButton.disabled = false;
                     self.previousButton.alpha = 1;
                 }
-            }, LevelSelectScene.TOTAL_TRANSITION_DURATION);
+            }, PuzzleSelectScene.TOTAL_TRANSITION_DURATION);
 
             if (this.nextButton.alpha < 1) {
                 this.nextButton.disabled = false;
@@ -224,13 +224,13 @@
         }
     };
 
-    LevelSelectScene.prototype.updatePageLabel = function () {
+    PuzzleSelectScene.prototype.updatePageLabel = function () {
         this.pageLabel.text = 'Page ' + (this.currentPage + 1) + ' of ' + this.totalPages;
         this.difficultyLabel.text = 'Size: ' + PUZZLES[this.selectedPuzzle].size + 'x' + PUZZLES[this.selectedPuzzle].size;
         this.completedLabel.text = 'Completed? ' + (this.completedPuzzles[this.selectedPuzzle] ? '✓' : '✗');
     };
 
-    LevelSelectScene.prototype.onPointEnd = function (points) {
+    PuzzleSelectScene.prototype.onPointEnd = function (points) {
         Arcadia.Scene.prototype.onPointEnd.call(this, points);
         var self = this,
             cursor = {
@@ -253,7 +253,7 @@
         });
     };
 
-    LevelSelectScene.prototype.drawUi = function () {
+    PuzzleSelectScene.prototype.drawUi = function () {
         var self = this;
 
         this.pageLabel = new Arcadia.Label({
@@ -364,10 +364,10 @@
         this.add(this.nextButton);
     };
 
-    LevelSelectScene.TRANSITION_TYPE = 'cubicInOut';
-    LevelSelectScene.TRANSITION_DURATION = 400;
-    LevelSelectScene.TRANSITION_DELAY = 100;
-    LevelSelectScene.TOTAL_TRANSITION_DURATION = 600;
+    PuzzleSelectScene.TRANSITION_TYPE = 'cubicInOut';
+    PuzzleSelectScene.TRANSITION_DURATION = 400;
+    PuzzleSelectScene.TRANSITION_DELAY = 100;
+    PuzzleSelectScene.TOTAL_TRANSITION_DURATION = 600;
 
-    root.LevelSelectScene = LevelSelectScene;
+    root.PuzzleSelectScene = PuzzleSelectScene;
 }(window));

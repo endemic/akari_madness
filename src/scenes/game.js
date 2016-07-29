@@ -1,5 +1,5 @@
 /*jslint this, browser */
-/*global window, Arcadia, sona, PUZZLES, TUTORIALS, Grid, Cell, LevelSelectScene */
+/*global window, Arcadia, sona, PUZZLES, TUTORIALS, Grid, Cell, PuzzleSelectScene */
 
 (function (root) {
     'use strict';
@@ -162,7 +162,7 @@
             size: {width: Grid.MAX_WIDTH / 2 - BUTTON_PADDING, height: 40},
             action: function () {
                 sona.play('button');
-                Arcadia.changeScene(LevelSelectScene);
+                Arcadia.changeScene(PuzzleSelectScene);
             }
         });
         quitButton.position = {
@@ -276,7 +276,7 @@
                 var incompletePuzzleIndex = completedPuzzles.indexOf(null);
 
                 if (incompletePuzzleIndex === -1) {
-                    Arcadia.changeScene(LevelSelectScene);
+                    Arcadia.changeScene(PuzzleSelectScene);
                 } else if (Arcadia.isLocked() && incompletePuzzleIndex >= Arcadia.FREE_LEVEL_COUNT) {
                     Arcadia.changeScene(UnlockScene);
                 } else {
@@ -294,7 +294,7 @@
             position: {x: 0, y: 75},
             action: function () {
                 sona.play('button');
-                Arcadia.changeScene(LevelSelectScene);
+                Arcadia.changeScene(PuzzleSelectScene);
             }
         }));
     };

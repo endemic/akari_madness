@@ -9,3 +9,4 @@
 [x] Add "new" button to puzzle select, to create a new one of course
 [ ] Add some tutorial content (rip format from old games)
 [ ] Rewrite "rules" screen
+[ ] Create puzzles; 10 of 5x5 thru 9x9, then 50 10x10
