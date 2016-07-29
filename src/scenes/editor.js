@@ -4,18 +4,24 @@
 (function (root) {
     'use strict';
 
-    var EditorScene = function () {
+    var EditorScene = function (options) {
         Arcadia.Scene.apply(this);
-
         Arcadia.cycleBackground();
 
-        this.verticalPadding = 70;
+        options = options || {};
 
-        // Puzzle grid
+        var data;
+
+        if (options.puzzleIndex) {
+            data = PUZZLES[options.puzzleIndex];
+        }
+
+        this.verticalPadding = 70;
         this.grid = new Grid({
+            data: data,
             position: {
                 x: 0,
-                y: this.size.height / 2 - Grid.MAX_WIDTH / 2 - this.verticalPadding
+                y: this.size.height / 2 - Grid.MAX_HEIGHT / 2 - this.verticalPadding
             }
         });
         this.add(this.grid);

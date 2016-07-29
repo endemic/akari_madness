@@ -4,7 +4,7 @@
 [x] Pass user input into Grid object
 [x] Copy over level editor
 [x] Removing lights is wonky; can get to a state where one of the "beams" cast is broken
-[ ] Add "edit" button to puzzle select
+[x] Add "edit" button to puzzle select
 [x] Do mass-rename of "level" to "puzzle"
 [x] Add "new" button to puzzle select, to create a new one of course
 [ ] Add some tutorial content (rip format from old games)

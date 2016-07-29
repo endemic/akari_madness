@@ -4,11 +4,17 @@
   "description": "Moar logic puzzles",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "concat": "cat src/objects/*.js src/data/*.js src/lib/*.js src/scenes/*.js > dist/akari-madness.js",
+    "compress": "./node_modules/.bin/uglifyjs dist/akari-madness.js --source-map dist/akari-madness.min.js.map --source-map-root http://ganbarugames.com/akari/javascript --output dist/akari-madness.min.js --mangle --compress",
+    "copy_to_cordova": "cp dist/akari-madness.min.js cordova/www/javascript; cp node_modules/arcadia/dist/arcadia.min.js cordova/www/javascript; cp node_modules/sona/dist/sona.js cordova/www/javascript; cp -r assets/** cordova/www/assets",
+    "copy_to_web": "cp dist/akari-madness.min.js ../../websites/ganbarugames.com/akari/javascript; cp node_modules/arcadia/dist/arcadia.min.js ../../websites/ganbarugames.com/akari/javascript; cp node_modules/sona/dist/sona.js ../../websites/ganbarugames.com/akari/javascript; cp -r assets/** ../../websites/ganbarugames.com/akari/assets; cp dist/index.html ../../websites/ganbarugames.com/akari; cp manifest.json ../../websites/ganbarugames.com/akari",
+    "cordova": "npm run-script concat && npm run-script compress && npm run-script copy_to_cordova",
+    "web": "npm run-script concat && npm run-script compress && npm run-script copy_to_web"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/endemic/akari.git"
+    "url": "git+https://github.com/endemic/akari_madness.git"
   },
   "keywords": [
     "logic",
@@ -18,9 +24,9 @@
   "author": "Nathan Demick",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/endemic/akari/issues"
+    "url": "https://github.com/endemic/akari_madness/issues"
   },
-  "homepage": "https://github.com/endemic/akari#readme",
+  "homepage": "https://github.com/endemic/akari_madness#readme",
   "dependencies": {
     "arcadia": "^2.0.0",
     "sona": "^1.0.3"

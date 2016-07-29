@@ -263,13 +263,13 @@
         this.add(this.pageLabel);
 
         this.difficultyLabel = new Arcadia.Label({
-            position: {x: 0, y: 190},
+            position: {x: 0, y: 150},
             font: '24px monospace'
         });
         this.add(this.difficultyLabel);
 
         this.completedLabel = new Arcadia.Label({
-            position: {x: 0, y: 220},
+            position: {x: 0, y: 180},
             font: '24px monospace'
         });
         this.add(this.completedLabel);
@@ -312,7 +312,7 @@
         this.add(title);
 
         var playButton = new Arcadia.Button({
-            position: {x: 0, y: this.size.height / 2 - 50},
+            position: {x: 0, y: this.size.height / 2 - 100},
             size: {width: 180, height: 50},
             color: null,
             border: '2px white',
@@ -328,6 +328,20 @@
             }
         });
         this.add(playButton);
+
+        var editButton = new Arcadia.Button({
+            position: {x: 0, y: playButton.position.y + 60},
+            size: {width: 180, height: 50},
+            color: null,
+            border: '2px white',
+            text: 'edit',
+            font: '36px monospace',
+            action: function () {
+                sona.play('button');
+                Arcadia.changeScene(EditorScene, {puzzleIndex: self.selectedPuzzle});
+            }
+        });
+        this.add(editButton);
 
         // Create previous/next buttons
         this.previousButton = new Arcadia.Button({

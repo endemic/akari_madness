@@ -11,6 +11,7 @@
 
         Arcadia.cycleBackground();
 
+        // TODO: change this to `puzzleIndex` or something
         this.level = options.level || 0;
         localStorage.setItem('selectedLevel', this.level);
         this.levelData = PUZZLES[this.level];
