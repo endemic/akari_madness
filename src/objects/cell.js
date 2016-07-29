@@ -9,7 +9,7 @@
     Cell = function () {
         Arcadia.Shape.apply(this, arguments);
 
-        this.size = {width: Grid.CELL_SIZE, height: Grid.CELL_SIZE};
+        this.size = {width: Grid.CELL_WIDTH, height: Grid.CELL_HEIGHT};
         this.vertices = 4;
         this.color = 'white';
         this.border = '1px black';

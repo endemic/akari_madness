@@ -9,26 +9,13 @@
 
         Arcadia.cycleBackground();
 
-        /*
-         How does this editor work? Two buttons at top: "edit" and "play"
-         Edit mode: Tapping a cell will place a hint; initially no number
-                    Tap to increment numbers, resets to empty cell after value of "4"
-         Play mode: Plays game as normal; background changes color when puzzle is in
-                    a "solved" state
-         */
-
-        this.MAX_GRID_COUNT = 10;
-        this.MIN_GRID_COUNT = 5;
-
-        this.gridCount = this.MAX_GRID_COUNT;   // set initial size of editor
         this.verticalPadding = 70;
 
         // Puzzle grid
         this.grid = new Grid({
-            size: this.gridCount,
             position: {
                 x: 0,
-                y: this.size.height / 2 - Grid.MAX_SIZE / 2 - this.verticalPadding
+                y: this.size.height / 2 - Grid.MAX_WIDTH / 2 - this.verticalPadding
             }
         });
         this.add(this.grid);
@@ -53,18 +40,20 @@
         var puzzles = localStorage.getObject('puzzles') || [];
         var self = this;
         var data = {
-            size: this.gridCount,
+            size: this.grid.data.size,
             hints: []
         };
 
         this.grid.cells.forEach(function (cell, index) {
-            if (cell.status !== Cell.STATUS.HINT) {
+            var size = this.grid.data.size;
+
+            if (index >= Math.pow(size, 2) || cell.status !== Cell.STATUS.HINT) {
                 return;
             }
 
             // Cell coordinates are stored with origin at top left
-            var row = Math.floor(index / this.gridCount);
-            var column = index % this.gridCount;
+            var row = Math.floor(index / size);
+            var column = index % size;
             var number = cell.number;
 
             data.hints.push({position: {x: column, y: row}, number: number});
@@ -73,12 +62,12 @@
         // debugger;
         puzzles.push(data);
         localStorage.setObject('puzzles', puzzles);
-        // console.log(JSON.stringify(data));
+        console.log(JSON.stringify(data));
     };
 
     EditorScene.prototype.drawUi = function () {
         var padding = 10;
-        var buttonWidth = Grid.MAX_SIZE / 2 - padding;
+        var buttonWidth = Grid.MAX_WIDTH / 2 - padding;
         var buttonHeight = 40;
         var self = this;
 
@@ -96,11 +85,13 @@
             },
             action: function () {
                 sona.play('button');
-                if (self.gridCount > self.MIN_GRID_COUNT) {
-                    self.gridCount -= 1;
-                    self.grid.resize(self.gridCount);
+
+                var size = this.grid.data.size;
+                if (size > Grid.MIN_SIZE) {
+                    size -= 1;
+                    this.grid.resize(size);
                 }
-            }
+            }.bind(this)
         });
         this.add(smallerButton);
 
@@ -118,11 +109,13 @@
             },
             action: function () {
                 sona.play('button');
-                if (self.gridCount < self.MAX_GRID_COUNT) {
-                    self.gridCount += 1;
-                    self.grid.resize(self.gridCount);
+
+                var size = this.grid.data.size;
+                if (size < Grid.MAX_SIZE) {
+                    size += 1;
+                    this.grid.resize(size);
                 }
-            }
+            }.bind(this)
         });
         this.add(biggerButton);
 
@@ -142,7 +135,7 @@
                 sona.play('button');
                 // Change action to place lights; normal gameplay
                 // TODO: highlight button in some way
-                this.grid.mode = 'play';
+                this.grid.mode = Grid.MODES.PLAY;
             }.bind(this)
         });
         this.add(playButton);
@@ -163,7 +156,7 @@
                 sona.play('button');
                 // Change action to place hints; puzzle editor
                 // TODO: highlight button in some way
-                this.grid.mode = 'edit';
+                this.grid.mode = Grid.MODES.EDIT;
             }.bind(this)
         });
         this.add(editButton);

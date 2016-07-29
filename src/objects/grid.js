@@ -12,12 +12,13 @@
         this.data = options.data || {size: 10, hints: []};
 
         this.size = {
-            width: Grid.CELL_SIZE * this.data.size,
-            height: Grid.CELL_SIZE * this.data.size
+            width: Grid.CELL_WIDTH * this.data.size,
+            height: Grid.CELL_HEIGHT * this.data.size
         };
         this.color = null;
         this.border = '2px black';
 
+        // Default to "play," rather than "edit"
         this.mode = Grid.MODES.PLAY;
 
         this.calculateBounds();
@@ -29,8 +30,8 @@
             var y = Math.floor(this.cells.length / this.data.size);
             var c = new Cell({
                 position: {
-                    x: -this.size.width / 2 + (x * Grid.CELL_SIZE) + Grid.CELL_SIZE / 2,
-                    y: -this.size.height / 2 + (y * Grid.CELL_SIZE) + Grid.CELL_SIZE / 2
+                    x: -this.size.width / 2 + (x * Grid.CELL_WIDTH) + Grid.CELL_WIDTH / 2,
+                    y: -this.size.height / 2 + (y * Grid.CELL_HEIGHT) + Grid.CELL_HEIGHT / 2
                 }
             });
             this.add(c);
@@ -48,8 +49,13 @@
 
     Grid.prototype = new Arcadia.Shape();
 
-    Grid.MAX_SIZE = 372;
-    Grid.CELL_SIZE = Grid.MAX_SIZE / 10;
+    Grid.MAX_SIZE = 10;
+    Grid.MIN_SIZE = 5;
+
+    Grid.MAX_WIDTH = Grid.MAX_HEIGHT = 372;
+    Grid.CELL_WIDTH = Grid.MAX_WIDTH / 10;
+    Grid.CELL_HEIGHT = Grid.MAX_HEIGHT / 10;
+
     Grid.MODES = {
         PLAY: 'play',
         EDIT: 'edit'
@@ -67,8 +73,8 @@
             return [null, null];
         }
 
-        var row = Math.floor((point.y - this.bounds.top) / Grid.CELL_SIZE);
-        var column = Math.floor((point.x - this.bounds.left) / Grid.CELL_SIZE);
+        var row = Math.floor((point.y - this.bounds.top) / Grid.CELL_WIDTH);
+        var column = Math.floor((point.x - this.bounds.left) / Grid.CELL_HEIGHT);
 
         return [row, column];
     };
@@ -80,18 +86,18 @@
         // Get bounds of user interactive area
         this.bounds = {
             right: right + this.position.x,
-            left: (right - (Grid.CELL_SIZE * this.data.size)) + this.position.x,
+            left: (right - (Grid.CELL_WIDTH * this.data.size)) + this.position.x,
             bottom: bottom + this.position.y,
-            top: (bottom - (Grid.CELL_SIZE * this.data.size)) + this.position.y
+            top: (bottom - (Grid.CELL_HEIGHT * this.data.size)) + this.position.y
         };
     };
 
-    Grid.prototype.resize = function (newCellCount) {
-        if (!Number.isInteger(newCellCount)) {
+    Grid.prototype.resize = function (newSize) {
+        if (!Number.isInteger(newSize)) {
             return;
         }
 
-        this.data.size = newCellCount;
+        this.data.size = newSize;
 
         // Add new cells if necessary
         while (this.cells.length < Math.pow(this.data.size, 2)) {
@@ -101,8 +107,8 @@
         }
 
         this.size = {
-            width: Grid.CELL_SIZE * this.data.size,
-            height: Grid.CELL_SIZE * this.data.size
+            width: Grid.CELL_WIDTH * this.data.size,
+            height: Grid.CELL_HEIGHT * this.data.size
         };
 
         // Hide all cells, then show correct # of cells
@@ -120,8 +126,8 @@
             var y = Math.floor(index / this.data.size);
 
             cell.position = {
-                x: -this.size.width / 2 + (x * Grid.CELL_SIZE) + Grid.CELL_SIZE / 2,
-                y: -this.size.height / 2 + (y * Grid.CELL_SIZE) + Grid.CELL_SIZE / 2
+                x: -this.size.width / 2 + (x * Grid.CELL_WIDTH) + Grid.CELL_WIDTH / 2,
+                y: -this.size.height / 2 + (y * Grid.CELL_HEIGHT) + Grid.CELL_HEIGHT / 2
             };
         }.bind(this));
 

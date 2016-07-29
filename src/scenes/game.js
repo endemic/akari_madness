@@ -10,7 +10,6 @@
         options = options || {};
 
         Arcadia.cycleBackground();
-        this.color = 'wheat';
 
         this.level = options.level || 0;
         localStorage.setItem('selectedLevel', this.level);
@@ -27,7 +26,7 @@
             data: this.levelData,
             position: {
                 x: 0,
-                y: this.size.height / 2 - Grid.MAX_SIZE / 2 - this.VERTICAL_PADDING
+                y: this.size.height / 2 - Grid.MAX_HEIGHT / 2 - this.VERTICAL_PADDING
             }
         });
         this.add(this.grid);
@@ -134,30 +133,21 @@
         completedLevels[this.level] = true;
         localStorage.setObject('completedLevels', completedLevels);
 
-        var self = this;
-
         window.setTimeout(function () {
-            // sona.play('win');
-            alert('u win, bro');
+            sona.play('win');
 
             // Hide existing crap
-            self.grid.tween('alpha', 0, 500);
-            self.clues.forEach(function (clue) {
-                clue.tween('alpha', 0, 500);
-            });
-            self.squares.forEach(function (square) {
-                square.tween('alpha', 0, 500);
-            });
-            self.remove(self.hint);
-            self.remove(self.tutorialLabelBackground);
+            this.grid.tween('alpha', 0, 500);
+            this.remove(this.hint);
+            this.remove(this.tutorialLabelBackground);
 
             // Show new crap
-            self.add(self.completeBackground);
-            self.completeBackground.scale = 0;
+            this.add(this.completeBackground);
+            this.completeBackground.scale = 0;
             window.setTimeout(function () {
-                self.completeBackground.tween('scale', 1, 1000, 'expoOut');
-            }, 250);
-        }, 500);
+                this.completeBackground.tween('scale', 1, 1000, 'expoOut');
+            }.bind(this), 250);
+        }.bind(this), 500);
     };
 
     GameScene.prototype.drawUi = function () {
@@ -169,7 +159,7 @@
             border: '2px white',
             text: 'quit',
             font: '24px monospace',
-            size: {width: Grid.MAX_SIZE / 2 - BUTTON_PADDING, height: 40},
+            size: {width: Grid.MAX_WIDTH / 2 - BUTTON_PADDING, height: 40},
             action: function () {
                 sona.play('button');
                 Arcadia.changeScene(LevelSelectScene);
@@ -186,7 +176,7 @@
             border: '2px white',
             text: 'reset',
             font: '24px monospace',
-            size: {width: Grid.MAX_SIZE / 2 - BUTTON_PADDING, height: 40},
+            size: {width: Grid.MAX_WIDTH / 2 - BUTTON_PADDING, height: 40},
             action: function () {
                 sona.play('erase');
 
@@ -205,7 +195,7 @@
         var areaLabelBackground = new Arcadia.Shape({
             color: null,
             border: '2px white',
-            size: {width: Grid.MAX_SIZE / 2 - BUTTON_PADDING, height: 80}
+            size: {width: Grid.MAX_WIDTH / 2 - BUTTON_PADDING, height: 80}
         });
         areaLabelBackground.position = {
             x: -areaLabelBackground.size.width / 2 - BUTTON_PADDING,
@@ -223,7 +213,7 @@
         var timerLabelBackground = new Arcadia.Shape({
             color: null,
             border: '2px white',
-            size: {width: Grid.MAX_SIZE / 2 - BUTTON_PADDING, height: 80}
+            size: {width: Grid.MAX_WIDTH / 2 - BUTTON_PADDING, height: 80}
         });
         timerLabelBackground.position = {
             x: timerLabelBackground.size.width / 2 + BUTTON_PADDING,
@@ -242,7 +232,7 @@
             this.tutorialLabelBackground = new Arcadia.Shape({
                 color: null,
                 border: '2px white',
-                size: {width: Grid.MAX_SIZE / 1.5, height: 110},
+                size: {width: Grid.MAX_WIDTH / 1.5, height: 110},
                 position: {x: 0, y: 230}
             });
             this.add(this.tutorialLabelBackground);
@@ -262,8 +252,8 @@
         this.completeBackground = new Arcadia.Shape({
             color: null,
             border: '2px white',
-            size: {width: Grid.MAX_SIZE / 1.5, height: Grid.MAX_SIZE / 1.5},
-            position: {x: 0, y: this.size.height / 2 - Grid.MAX_SIZE / 2 - this.VERTICAL_PADDING},
+            size: {width: Grid.MAX_WIDTH / 1.5, height: Grid.MAX_HEIGHT / 1.5},
+            position: {x: 0, y: this.size.height / 2 - Grid.MAX_HEIGHT / 2 - this.VERTICAL_PADDING},
             enablePointEvents: true
         });
 
