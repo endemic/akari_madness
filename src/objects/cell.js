@@ -11,7 +11,7 @@
 
         this.size = {width: Grid.CELL_WIDTH, height: Grid.CELL_HEIGHT};
         this.vertices = 4;
-        this.color = 'white';
+        this.color = Cell.DEFAULT_COLOR;
         this.border = '1px black';
         this.status = Cell.STATUS.EMPTY;
 
@@ -49,11 +49,15 @@
         HINT: 4
     };
 
+    Cell.DEFAULT_COLOR = 'white';
+    Cell.LIGHT_COLOR = 'yellow';
+    Cell.HINT_COLOR = 'black';
+
     Cell.prototype.incrementLightSources = function () {
         this.lightSources += 1;
 
         if (this.lightSources === 1) {
-            this.color = 'teal';
+            this.color = Cell.LIGHT_COLOR;
         }
     };
 
@@ -62,7 +66,7 @@
 
         if (this.lightSources <= 0) {
             this.lightSources = 0;
-            this.color = 'white';
+            this.color = Cell.DEFAULT_COLOR;
         }
     };
 
@@ -95,9 +99,9 @@
 
     Cell.prototype.convertToEmpty = function () {
         this.number = null;
-        this.color = 'white';
+        this.color = Cell.DEFAULT_COLOR;
         if (this.lightSources > 0) {
-            this.color = 'teal';
+            this.color = Cell.LIGHT_COLOR;
         }
         this.status = Cell.STATUS.EMPTY;
         this.deactivate(this.icon);
@@ -107,7 +111,7 @@
     Cell.prototype.convertToHint = function (number) {
         // Funky condition here, because `0` (a valid hint #) evals to `false`
         this.number = Number.isInteger(number) ? number : null;
-        this.color = 'black';
+        this.color = Cell.HINT_COLOR;
         this.status = Cell.STATUS.HINT;
 
         if (this.number !== null) {

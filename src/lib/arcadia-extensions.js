@@ -19,5 +19,6 @@ Arcadia.cycleBackground = function () {
 
     localStorage.setItem('currentColorIndex', currentColorIndex);
     document.body.style['background-color'] = COLORS[currentColorIndex];
+    Cell.LIGHT_COLOR = COLORS[currentColorIndex];
     return COLORS[currentColorIndex];
 };
