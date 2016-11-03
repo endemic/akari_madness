@@ -74,6 +74,20 @@
             }
         });
         this.add(aboutButton);
+
+        var editorButton = new Arcadia.Button({
+            position: {x: 0, y: aboutButton.position.y + aboutButton.size.height + BUTTON_MARGIN},
+            size: {width: 180, height: 50},
+            color: null,
+            border: '2px white',
+            text: 'editor',
+            font: '36px monospace',
+            action: function () {
+                sona.play('button');
+                Arcadia.changeScene(EditorScene);
+            }
+        });
+        this.add(editorButton);
     };
 
     TitleScene.prototype = new Arcadia.Scene();
