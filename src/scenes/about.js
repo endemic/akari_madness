@@ -35,7 +35,7 @@
         var creditsText = [
             'Programming by Nathan Demick',
             'Puzzle concept by Nikoli',
-            '(c) 2011-2016 Ganbaru Games',
+            '(c) 2016 Ganbaru Games',
             'https://ganbarugames.com'
         ];
 
