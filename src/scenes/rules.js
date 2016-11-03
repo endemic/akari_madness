@@ -31,6 +31,24 @@
             'mistake.'
         ];
 
+        text = `The goal of Akari is to
+"light up" the entire
+puzzle grid. A light
+shines in four
+directions, and you
+can place as many as
+you like. The only
+limitation is the
+numbered squares in the
+grid. A square with a
+"3" can only have three
+lights in its adjacent
+north, south, east, or
+west spaces. And a
+light can't shine on
+another light.`;
+// ********************
+
         var titleLabel = new Arcadia.Label({
             text: 'rules',
             font: '64px monospace',
@@ -53,8 +71,9 @@
         this.add(backButton);
 
         var detailLabel = new Arcadia.Label({
-            text: text.join(''),
-            // alignment: 'left',
+            // text: text.join(''),
+            text: text,
+            alignment: 'left',
             font: '24px monospace',
             position: {x: 0, y: 75}
         });
