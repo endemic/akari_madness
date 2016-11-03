@@ -126,7 +126,7 @@
         this.add(biggerButton);
 
         var playButton = new Arcadia.Button({
-            color: null,
+            color: 'rgba(255, 255, 255, 0.25)',
             border: '3px white',
             label: new Arcadia.Label({
                 text: 'play',
@@ -141,6 +141,8 @@
                 sona.play('button');
                 // Change action to place lights; normal gameplay
                 // TODO: highlight button in some way
+                playButton.color = 'rgba(255, 255, 255, 0.25)';
+                editButton.color = null;
                 this.grid.mode = Grid.MODES.PLAY;
             }.bind(this)
         });
@@ -162,6 +164,8 @@
                 sona.play('button');
                 // Change action to place hints; puzzle editor
                 // TODO: highlight button in some way
+                playButton.color = null;
+                editButton.color = 'rgba(255, 255, 255, 0.25)';
                 this.grid.mode = Grid.MODES.EDIT;
             }.bind(this)
         });
