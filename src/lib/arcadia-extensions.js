@@ -6,7 +6,7 @@ Arcadia.isLocked = function () {
 };
 
 Arcadia.cycleBackground = function () {
-    var COLORS = ['red', 'green', 'purple', 'blue', 'teal', 'grey', 'maroon', 'black'],
+    var COLORS = ['red', 'green', 'purple', 'blue', 'teal', 'grey', 'maroon'],
         currentColorIndex;
 
     currentColorIndex = parseInt(localStorage.getItem('currentColorIndex'), 10) || 0;
