@@ -181,10 +181,7 @@
             action: function () {
                 sona.play('erase');
 
-                self.squares.forEach(function (square) {
-                    self.remove(square);
-                });
-                self.squares = [];
+                self.grid.reset();
             }
         });
         resetButton.position = {

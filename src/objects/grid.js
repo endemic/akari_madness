@@ -309,5 +309,13 @@
         return true;
     };
 
+    Grid.prototype.reset = function () {
+        this.cells.forEach(function (cell) {
+            if (cell.status !== Cell.STATUS.HINT) {
+                cell.reset();
+            }
+        });
+    };
+
     root.Grid = Grid;
 }(window));

@@ -120,5 +120,10 @@
         }
     };
 
+    Cell.prototype.reset = function () {
+        this.lightSources = 0;
+        this.convertToEmpty();
+    };
+
     root.Cell = Cell;
 }(window));
