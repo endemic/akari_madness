@@ -235,7 +235,7 @@
                 }
 
                 // Go up from the light
-                for (i = index - size; i > 0; i -= size) {
+                for (i = index - size; i >= 0; i -= size) {
                     if (this.cells[i].status === Cell.STATUS.HINT) {
                         break;
                     }
@@ -290,11 +290,28 @@
                 var up = i - size;
                 var left = i - 1;
                 var right = i + 1;
-                var bottom = i + size;
+                var down = i + size;
+
+                // consider cells at the edge of the grid
+                if (up < 0) {
+                    up = null;
+                }
+
+                if (down >= this.cells.length) {
+                    down = null;
+                }
+
+                if (Math.floor(left / size) !== Math.floor(i / size)) {
+                    left = null;
+                }
+
+                if (Math.floor(right / size) !== Math.floor(i / size)) {
+                    right = null;
+                }
 
                 var lightsCounter = 0;
-                [up, left, right, bottom].forEach(function (index) {
-                    if (this.cells[index] && this.cells[index].status === Cell.STATUS.LIGHT) {
+                [up, down, left, right].forEach(function (index) {
+                    if (index && this.cells[index].status === Cell.STATUS.LIGHT) {
                         lightsCounter += 1;
                     }
                 }.bind(this));
