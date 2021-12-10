@@ -1,0 +1,10 @@
+{
+  "name": "Akari Madness\nJapanese Logic Puzzles",
+  "short_name": "Akari",
+  "start_url": "index.html",
+  "icons": [],
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "display": "standalone",
+  "orientation": "portrait"
+}
