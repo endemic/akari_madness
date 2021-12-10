@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "concat": "cat src/objects/*.js src/data/*.js src/lib/*.js src/scenes/*.js > dist/akari-madness.js",
+    "concat": "cat src/lib/*.js src/objects/*.js src/data/*.js src/scenes/*.js > dist/akari-madness.js",
     "compress": "./node_modules/.bin/uglifyjs dist/akari-madness.js --source-map \"filename='dist/akari-madness.min.js.map',url='https://ganbarugames.com/akari/javascript'\" --output dist/akari-madness.min.js --mangle --compress",
     "copy_to_web": "cp dist/akari-madness.min.js ../ganbarugames.com/akari/javascript; cp node_modules/arcadia/dist/arcadia.min.js ../ganbarugames.com/akari/javascript; cp node_modules/sona/dist/sona.js ../ganbarugames.com/akari/javascript; cp -r assets/** ../ganbarugames.com/akari/assets; cp dist/index.html ../ganbarugames.com/akari; cp manifest.json ../ganbarugames.com/akari",
     "cordova": "npm run-script concat && npm run-script compress && npm run-script copy_to_cordova",
